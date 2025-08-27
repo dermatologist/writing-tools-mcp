@@ -78,7 +78,7 @@ class AIDetectionAnalyzer:
             for sentence in sentences:
                 if sentence.strip():
                     # For long sentences, chunk them and average the perplexity
-                    chunks = self._chunk_text(sentence, tokenizer, config["max_length"], config["overlap"])
+                    chunks = self._chunk_text(sentence, tokenizer, self.config["perplexity"]["max_length"], self.config["perplexity"]["overlap"])
                     chunk_perplexities = []
 
                     for chunk in chunks:
@@ -110,7 +110,7 @@ class AIDetectionAnalyzer:
 
             # Check against thresholds for AI detection flags
             flags = {"high_ai_probability": False, "reasons": []}
-            thresholds = config["thresholds"]
+            thresholds = self.config["perplexity"]["thresholds"]
 
             if not np.isinf(doc_ppl) and doc_ppl < thresholds["ppl_max"]:
                 if doc_burstiness < thresholds["burstiness_min"]:
@@ -131,7 +131,7 @@ class AIDetectionAnalyzer:
                 "doc_ppl": round(doc_ppl, 2) if not np.isinf(doc_ppl) else None,
                 "doc_burstiness": round(doc_burstiness, 2),
                 "sentences": sentence_results,
-                "config": {"model": config["model_name"], "thresholds": thresholds},
+                "config": {"model": self.config["perplexity"]["model_name"], "thresholds": thresholds},
                 "flags": flags,
             }
 
@@ -239,7 +239,7 @@ class AIDetectionAnalyzer:
                 "z_scores": {},
                 "flags": {"high_ai_probability": False, "reasons": []},
                 "sentence_analysis": [],
-                "config": {"baseline": baseline, "thresholds": thresholds},
+                "config": {"baseline": baseline, "thresholds": thresholds}, # type: ignore
             }
 
     def _chunk_text(self, text, tokenizer, max_length=512, overlap=50):
