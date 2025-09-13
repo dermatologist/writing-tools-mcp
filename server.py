@@ -36,6 +36,9 @@ from server.models import initialize_models
 from server.text_processing import initialize_preprocessor
 from server.text_processing.sentence_splitter import initialize_sentence_splitter
 
+# Humanizer
+from utils.humanizer import AcademicTextHumanizer
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger.debug("Starting server.py initialization")
@@ -82,7 +85,31 @@ def list_tools():
         "passive-voice-detection",
         "perplexity-analysis",
         "stylometric-analysis",
+        "academic-text-humanizer",
     ]
+
+
+@mcp.tool()
+def academic_text_humanizer(
+    text: str,
+    use_passive=False,
+    use_synonyms=True
+) -> str:
+    """Humanizes academic text by applying various transformations.
+
+    Note: Use this function when the perplexity analysis indicates AI-generated content.
+
+    Args:
+        text (str): The input text to be humanized.
+        use_passive (bool, optional): Whether to convert sentences to passive voice. Defaults to False.
+        use_synonyms (bool, optional): Whether to replace words with synonyms. Defaults to True.
+
+    Returns:
+        str: The humanized text.
+    """
+    _humanizer = AcademicTextHumanizer()
+    return _humanizer.humanize_text(text, use_passive, use_synonyms)
+
 
 
 @mcp.tool()
