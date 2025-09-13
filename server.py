@@ -93,7 +93,7 @@ def list_tools():
 def academic_text_humanizer(
     text: str,
     use_passive=False,
-    use_synonyms=True
+    use_synonyms=False
 ) -> str:
     """Humanizes academic text by applying various transformations.
 

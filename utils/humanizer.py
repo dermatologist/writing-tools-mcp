@@ -65,6 +65,7 @@ class AcademicTextHumanizer:
 
         self.nlp = spacy.load("en_core_web_sm")
         self.model = SentenceTransformer(model_name)
+        download_nltk_resources()  # Ensure NLTK resources are available
 
         # Transformation probabilities
         self.p_passive = p_passive
